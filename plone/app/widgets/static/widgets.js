@@ -13770,9 +13770,13 @@ define('pat-registry',[
         // results in rescanning the DOM only for this pattern.
         initialized: false,
         init: function registry_init() {
-            $(document).ready(function() {
+            $(document).on('ready init-widgets', function(event, data) {
                 log.info("loaded: " + Object.keys(registry.patterns).sort().join(", "));
-                registry.scan(document.body);
+                var element = document.body;
+                if (event.type == 'init-widgets') {
+                    element = data.container;
+                }
+                registry.scan(element);
                 registry.initialized = true;
                 log.info("finished initial scan.");
             });
